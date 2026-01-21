@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>فرحه | تجربة الحجز</title>
+
+<style>
+body{
+  font-family: Tahoma;
+  background:#f5f5f5;
+}
+.container{
+  max-width:420px;
+  background:#fff;
+  margin:60px auto;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
+}
+h1{
+  text-align:center;
+  color:#000;
+}
+.price{
+  color:darkgreen;
+  font-weight:bold;
+}
+input,select,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+}
+button{
+  background:gold;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+#result{
+  margin-top:15px;
+  font-weight:bold;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>فرحه</h1>
+<p style="text-align:center">حجز القاعات – تجربة</p>
+
+<form id="bookingForm">
+<input type="text" id="name" placeholder="الاسم الكامل" required>
+<input type="tel" id="phone" placeholder="رقم الجوال" required>
+
+<select id="hall" required>
+<option value="">اختر القاعة</option>
+<option value="قاعة أفراح">قاعة أفراح – <span class="price">12000 ريال</span></option>
+<option value="قاعة مناسبات">قاعة مناسبات – 8000 ريال</option>
+<option value="قاعة مؤتمرات">قاعة مؤتمرات – 6000 ريال</option>
+</select>
+
+<input type="date" id="date" required>
+
+<button type="submit">تأكيد الحجز</button>
+</form>
+
+<div id="result"></div>
+</div>
+
+<script>
+const form = document.getElementById("bookingForm");
+const result = document.getElementById("result");
+
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const hall = document.getElementById("hall").value;
+  const date = document.getElementById("date").value;
+
+  const exists = bookings.find(
+    b => b.hall === hall && b.date === date
+  );
+
+  if(exists){
+    result.style.color = "red";
+    result.innerText = "❌ التاريخ محجوز مسبقًا";
+    return;
+  }
+
+  bookings.push({
+    name: name.value,
+    phone: phone.value,
+    hall,
+    date
+  });
+
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+
+  result.style.color = "green";
+  result.innerText = "✅ تم تأكيد الحجز فورًا";
+  form.reset();
+});
+</script>
+
+</body>
+</html>
